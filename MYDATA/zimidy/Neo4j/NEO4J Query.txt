@@ -1,0 +1,18 @@
+
+delete relation ship - > 
+
+MATCH (:Event)-[r:TAGGED]-(:Tag) 
+DELETE r
+
+
+delete a node  - > 
+
+MATCH (a:Event {name: "Footbal Game"}) DELETE a
+
+
+MATCH (a:User {name: "vinoth@gmail.com"}) DELETE a
+
+
+DELETE a Node along with relation ship
+
+MATCH (a:Event {name: "no start tyime time"}) -[r:CREATOR]-(:User)   DELETE r, a

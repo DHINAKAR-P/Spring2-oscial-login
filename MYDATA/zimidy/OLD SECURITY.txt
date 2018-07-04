@@ -1,0 +1,26 @@
+.and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // To allow CORS pre-flight requests
+                .antMatchers(HttpMethod.POST, PATH_LOGIN).permitAll()
+                .antMatchers(HttpMethod.POST, PATH_LOGOUT).permitAll()
+                .antMatchers(HttpMethod.POST, PATH_GRAPHQL).permitAll()
+                .antMatchers(HttpMethod.GET, "/browser").permitAll()
+                .antMatchers(HttpMethod.GET, "/favicon.ico").permitAll() // todo: who needs it?
+                .antMatchers(HttpMethod.GET, "/actuator/health").permitAll()
+                .anyRequest().authenticated()
+                .and()
+            .logout()
+                .logoutUrl(PATH_LOGOUT)
+                .deleteCookies(JwtHelper.TOKEN_COOKIE_NAME)
+                .logoutSuccessHandler(HttpStatusReturningLogoutSuccessHandler())
+                .and()
+            .addFilterBefore(
+                    JwtLoginFilter(jwtHelper, authenticationManager()),
+                    UsernamePasswordAuthenticationFilter::class.java
+            )
+            .addFilterBefore(
+                    JwtAuthenticationFilter(jwtHelper),
+                    UsernamePasswordAuthenticationFilter::class.java
+            )
+            .exceptionHandling()
+                .authenticationEntryPoint(RestAuthenticationEntryPoint())

@@ -1,0 +1,72 @@
+mutation {
+ createEvent(input: {
+ data: {
+ name:"White Devil"
+ description :"hackers reunion"
+ creatorUserId:"9002199d-5142-4d48-ab62-9e9962760352"
+  location:{
+    latitude:12.9998898797
+    longitude:89.875664535
+  },
+  startDate:1526448000000,
+  endDate:1526455200000,
+  pictureURL:"http://images-hdwallpapers.com/wp-content/uploads/2017/12/Nice-Rajnikanth-1080p-Photos.jpg"
+  groups:["CIPLA","TESTDA"],
+  friendIds:[123,4345]
+  
+ }
+ }) {
+ node {
+ id
+ name
+ description
+ creator {
+ id
+  email
+ }
+  pictureURL 
+ }
+ }
+}
+-----------------update event ------------------
+mutation{
+    updateEvent(input:{
+      data:{
+          id:"7c64eb52-a8b6-4656-994f-31d72601cb10",
+          name:"jilla event"
+      }
+    }){
+      node{
+        id
+       name
+      }
+    }
+  }
+
+
+-------------------------- get event by ID ----------------
+query{
+  event(id:"31e5c7f8-cc1f-4b63-8d03-acff4b6832b6"){
+    id
+    location{
+      lat
+      lon
+    }
+    name
+    description
+    creator{
+      firstName
+      lastName
+      email
+      pointBalance
+      gender
+      homeLocation
+      homeLocality
+    }
+    pictureURL
+    startDate
+    endDate
+  }
+  
+}
+

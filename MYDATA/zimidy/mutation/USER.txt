@@ -1,0 +1,61 @@
+
+mutation {
+ updateUser(input: {
+  data: {
+     id:"8d56156c-94b0-4727-a0f7-44c2544891d6"
+    firstName:"dhina"
+    lastName:"panneer selvam"
+    email:"dhina@gmail.com"
+    password:"dhina"
+    dfa:true
+    soundOn:true
+  	pointBalance:300
+    pointsPending:41
+    defaultImageFileName:"https://storage.googleapis.com/staging_images/S_CPI_2e07870e-5d82-4cf5-9846-fecd06de0dd9",
+    gender:MALE
+    homeLocation:"chinna selam"
+    fuzzyHomeLocation:"oothangarai kadu"
+    currentLocation:"chennai"
+    currentLocality:"porur"
+    birthDate:714873600000
+    
+  }
+ }) {
+ node {
+      firstName
+      lastName
+      email
+      dfa
+      soundOn
+      pointBalance
+      pointsPending
+      defaultImageFileName
+  password
+       interests{
+        name
+      }
+  fuzzyHomeLocation
+  currentLocation
+  currentLocality
+  homeLocation
+  birthDate
+  homeLocality
+       
+ }
+ }
+}
+
+
+
+
+
+
+
+
+
+query{
+  user(id:"8d56156c-94b0-4727-a0f7-44c2544891d6"){
+    id
+    email
+  }
+}

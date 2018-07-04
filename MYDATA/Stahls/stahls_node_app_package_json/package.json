@@ -1,0 +1,36 @@
+{
+  "name": "stahls_node_app",
+  "version": "0.0.0",
+ "private": false,
+  "scripts": {
+    "start": "nodemon main",
+    "test": "jasmine-node spec --verbose --captureExceptions"
+  },
+  "dependencies": {
+    "async": "^2.6.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "express-fileupload": "^0.4.0",
+    "jasmine-node": "^1.14.5",
+    "jsonwebtoken": "^8.2.1",
+    "morgan": "^1.9.0",
+    "request": "^2.85.0",
+    "nodemon": "^1.14.11",
+    "mssql": "^4.1.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "properties-reader": "0.0.16",
+    "random-number": "0.0.9",
+    "sequelize": "^4.32.2",
+    "uuid": "^3.2.1",
+    "@angular/cli": "^1.7.3"
+  },
+  "devDependencies": {
+    "@angular/cli": "^1.7.3"
+  },
+"publishConfig":{
+  "registry":"http://35.171.121.149:8081/repository/npm-private/"
+}
+
+}
