@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+
+    <title>GraphQL API Browser</title>
+
+    <style>
+        body {
+            height: 100%;
+            margin: 0;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #login_block {
+            width: 100%
+        }
+
+        #status_label {
+            display: inline-block;
+        }
+
+        #graphiql_block {
+            height: 100vh;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/graphiql/0.11.11/graphiql.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/graphiql/0.11.11/graphiql.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<div id="login_block">
+    <form id="email_password_login_form">
+        <input id="email_input" placeholder="Email" name="email">
+        <input id="password_input" placeholder="Password" name="password">
+        <input id="login_button" type="button" value="Login">
+        <input id="logout_button" type="button" value="Logout">
+        <label id="status_label"> </label>
+    </form>
+</div>
+<div id="graphiql_block">Loading...</div>
+<script>
+
+  $(function () {
+    $(window).resize(function () {
+      $("#graphiql_block").height($(window).height() - $("#login_block").height())
+    })
+
+    function displayText (message, color) {
+      let $statusLabel = $('#status_label')
+      $statusLabel.text(message)
+      $statusLabel.css('color', color ? color : '')
+    }
+
+    function displayError (message) {
+      displayText(message, 'red')
+    }
+
+    $("#login_button").click(function (e) {
+      displayText('...')
+
+      let email = $('#email_input').val()
+      let password = $('#password_input').val()
+
+      if (!email) {
+        displayError('An email address should be specified.')
+        return false
+      }
+
+      let protocol = '@{ssl_enabled}' === 'true' ? 'https' : 'http'
+      $.ajax({
+        type: "post",
+        url: `${protocol}://@{domain}:@{port}/login`,
+        contentType: "application/json",
+        data: JSON.stringify({
+          email: email,
+          password: password
+        })
+      }).done(function (data, textStatus, jqXHR) {
+        $("#login_button").hide()
+        $("#logout_button").show()
+        displayText(`{ id: ${data.id}, name: ${data.firstName} ${data.lastName} }`)
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+        logout().then(function () {
+          displayError('Failed to login.')
+        })
+      })
+
+      return false
+    })
+
+    function logout() {
+      return $.post("/logout").then(function() {
+        $("#login_button").show()
+        $("#logout_button").hide()
+        displayText('')
+      })
+    }
+
+    $("#logout_button").click(logout)
+
+    logout()
+  })
+
+  // Parse the search string to get url parameters.
+  let search = window.location.search
+  let parameters = {}
+  search.substr(1).split('&').forEach(function (entry) {
+    let eq = entry.indexOf('=')
+    if (eq >= 0) {
+      parameters[decodeURIComponent(entry.slice(0, eq))] = decodeURIComponent(entry.slice(eq + 1))
+    }
+  })
+
+  // if variables was provided, try to format it.
+  if (parameters.variables) {
+    try {
+      parameters.variables = JSON.stringify(JSON.parse(parameters.variables), null, 2)
+    } catch (e) {
+      // Do nothing, we want to display the invalid JSON as a string, rather than present an error.
+    }
+  }
+
+  // When the query and variables string is edited, update the URL bar so that it can be easily shared
+  function onEditQuery (newQuery) {
+    parameters.query = newQuery
+    updateURL()
+  }
+
+  function onEditVariables (newVariables) {
+    parameters.variables = newVariables
+    updateURL()
+  }
+
+  function onEditOperationName (newOperationName) {
+    parameters.operationName = newOperationName
+    updateURL()
+  }
+
+  function updateURL () {
+    let newSearch = '?' + Object.keys(parameters).filter(function (key) {
+      return Boolean(parameters[key])
+    }).map(function (key) {
+      return encodeURIComponent(key) + '=' + encodeURIComponent(parameters[key])
+    }).join('&')
+    history.replaceState(null, null, newSearch)
+  }
+
+  // Note: It must return Promise or Observable.
+  function graphQLFetcher (graphQLParams) {
+    return fetch('/graphql', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(graphQLParams),
+      credentials: 'include',
+    }).then(function (response) {
+      return response.text()
+    }).then(function (responseBody) {
+      try {
+        return JSON.parse(responseBody)
+      } catch (error) {
+        return responseBody
+      }
+    })
+  }
+
+  ReactDOM.render(
+    React.createElement(GraphiQL, {
+      fetcher: graphQLFetcher,
+      query: parameters.query,
+      variables: parameters.variables,
+      operationName: parameters.operationName,
+      onEditQuery: onEditQuery,
+      onEditVariables: onEditVariables,
+      onEditOperationName: onEditOperationName
+    }),
+    document.getElementById('graphiql_block')
+  )
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+### OS: Mac
+# desktop service store file
+.DS_Store
+
+### Python Cross Platform Scripts
+# python cache folder
+__pycache__/
+
+### Build Tool: Maven
+/target/
+
+### IDE: IntelliJ Idea
+/.idea/
+/*.iml
+
+### JRebel
+rebel.xml
+
+venv/

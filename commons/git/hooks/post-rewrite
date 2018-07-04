@@ -1,0 +1,12 @@
+#! /usr/bin/env python3
+import sys
+
+from utils import GitHooksUtils
+
+rewrite_type = sys.argv[1]
+if rewrite_type == 'rebase':
+    iso_timestamp = GitHooksUtils.timestamp()
+    branch_of_head = GitHooksUtils.get_branch_of_head()
+    revision = GitHooksUtils.get_revision_of_head()  # after rebase, head is on the target commit
+    GitHooksUtils.update_metadata(timestamp=iso_timestamp, branch=branch_of_head, revision=revision)
+    GitHooksUtils.rewrite_commit()

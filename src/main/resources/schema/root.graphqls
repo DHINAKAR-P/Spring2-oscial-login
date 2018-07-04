@@ -1,0 +1,36 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    metadata: Metadata!
+    viewer: User!
+}
+
+type Mutation {
+    # A dummy mutation field.
+    # We need it due to the issue: https://github.com/graphql-java/graphql-java-tools/issues/70.
+    # todo: remove this field, when at least one real mutation field will be added here or the issue resolved
+    dummyMutation: Boolean
+}
+
+type Metadata {
+    neo4j: ModuleMetadata!
+    api: ModuleMetadata!
+}
+
+type ModuleMetadata {
+    build: BuildMetadata!
+    commit: CommitMetadata!
+}
+
+type BuildMetadata {
+    timestamp: String!
+}
+
+type CommitMetadata {
+    timestamp: String!
+    branch: String!
+    revision: String!
+}

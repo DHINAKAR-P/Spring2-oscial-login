@@ -1,0 +1,7 @@
+#! /usr/bin/env python3
+from utils import GitHooksUtils
+
+iso_timestamp = GitHooksUtils.timestamp()
+branch_of_head = GitHooksUtils.get_branch_of_head()
+revision = GitHooksUtils.get_revision_of_head() + 1  # before commit, head is on a commit before the target one
+GitHooksUtils.update_metadata(timestamp=iso_timestamp, branch=branch_of_head, revision=revision)

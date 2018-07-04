@@ -1,0 +1,249 @@
+extend type Query {
+    user(id: ID!): User
+    users(before: String, after: String, first: Int, last: Int): UserConnection
+    isConnection(userId: Long, otherUserId: Long): Boolean
+    getDfaUsers(name: String): UserHasChatListDto
+    getDfaOtherUsers(userId: ID!, otherUserId: ID!): UserHasChatListDto
+}
+
+extend type Mutation {
+    createUser(input: CreateUserInput!): UserPayload
+    updateUser(input: UpdateUserInput!): UserPayload
+}
+
+# A person using our system
+type User implements Node {
+    id: ID!
+    firstName: String
+    lastName: String
+    email: String
+    password:String
+    dfa : Boolean
+    soundOn:Boolean
+    pointBalance: Long
+    pointsPending:Long
+    birthDate:Long
+    gender: Gender
+    defaultImageFileName: String
+    homeLocation: String
+    fuzzyHomeLocation: String
+    homeLocality: String
+    passwordVerificationCode: String
+    emailVerificationCode: String
+    mobileVerificationCode: String
+    mobileTextAlerts: Boolean
+    currentLocation: String
+    fuzzyCurrentLocation: String
+    currentLocality: String
+    reviewable: Boolean
+    gcmToken: String
+    commOptOut: Boolean
+    staff: Boolean
+    textEnabled: Boolean
+    stripeID: String
+    notificationsEnabled: Boolean
+    showUpcomingEvents: Boolean
+    showRecentEvents: Boolean
+    distanceUnit: String
+    gcmRegistrationToken: String
+    eventsCreated: Long
+    description: String
+    userAlerts: [UserAlert]
+    otherUserRels: [OtherUserRelationship]
+    attendsEventRels: [UserAttendsEventRelationship]
+    events(before: String, after: String, first: Int, last: Int): EventConnection
+}
+
+type UserConnection {
+    edges: [UserEdge]
+    pageInfo: PageInfo!
+}
+
+type UserEdge {
+    cursor: String!
+    node: User
+}
+
+input CreateUserInput {
+    clientMutationId: String
+    data: CreateUserData!
+}
+
+input CreateUserData {
+    firstName: String
+    lastName: String
+    password:String
+    email: String
+    dfa: Boolean
+    soundOn:Boolean
+    pointBalance: Long
+    pointsPending:Long
+    birthDate:Long
+    defaultImageFileName: String
+    gender: Gender
+    homeLocation: String
+    fuzzyHomeLocation: String
+    homeLocality: String
+    passwordVerificationCode: String
+    emailVerificationCode: String
+    mobileVerificationCode: String
+    mobileTextAlerts: Boolean
+    currentLocation: String
+    fuzzyCurrentLocation: String
+    currentLocality: String
+    reviewable: Boolean
+    gcmToken: String
+    commOptOut: Boolean
+    staff: Boolean
+    textEnabled: Boolean
+    stripeID: String
+    notificationsEnabled: Boolean
+    showUpcomingEvents: Boolean
+    showRecentEvents: Boolean
+    distanceUnit: String
+    gcmRegistrationToken: String
+    eventsCreated: Long
+    description: String
+}
+
+input UpdateUserInput {
+    clientMutationId: String
+    data: UpdateUserData!
+}
+
+input UpdateUserData {
+    id: ID!
+    firstName: String
+    lastName: String
+    email: String
+    dfa: Boolean
+    soundOn:Boolean
+    pointBalance: Long
+    pointsPending:Long
+    birthDate:Long
+    defaultImageFileName: String
+    gender: Gender
+    homeLocation: String
+    fuzzyHomeLocation: String
+    homeLocality: String
+    passwordVerificationCode: String
+    emailVerificationCode: String
+    mobileVerificationCode: String
+    mobileTextAlerts: Boolean
+    currentLocation: String
+    fuzzyCurrentLocation: String
+    currentLocality: String
+    reviewable: Boolean
+    gcmToken: String
+    commOptOut: Boolean
+    staff: Boolean
+    textEnabled: Boolean
+    stripeID: String
+    notificationsEnabled: Boolean
+    showUpcomingEvents: Boolean
+    showRecentEvents: Boolean
+    distanceUnit: String
+    gcmRegistrationToken: String
+    eventsCreated: Long
+    description: String
+}
+
+type UserPayload {
+    clientMutationId: String
+    node: User
+}
+
+type UserHasChatListDto {
+    users:[UserHasChatDto]!
+}
+
+type UserHasChatDto{
+    hasOpenChat : Boolean
+    connected : Boolean
+    hasRequestSent: Boolean
+}
+
+type UserAlert {
+    alertType: AlertType!
+    status : AlertStatus
+    originatorId: Long!
+    targetId: Long!
+    originatorName: String
+    originatorProfileImageUrl: String
+}
+
+enum AlertType{
+    CHATINVITE
+    FRIENDINVITE
+    EVENT_INVITE
+    JOINED_OPENEVENT
+    APPROVAL_REQEST
+    JOIN_DENIED
+    PAYMENT_REQUEST
+    PAYMENT_COMPLETED
+    EVENT_FULL
+    ACCEPT_EVENT_JOIN
+    DENY_EVENT_JOIN
+    EVENT_COMPLETE
+    EVENT_CANCEL
+    JOIN_APPROVED
+}
+
+enum AlertStatus{
+    NEW
+    VIEWED
+    HISTORY
+}
+
+type OtherUserRelationship {
+    lowFriendState : FriendState
+    highFriendState : FriendState
+    lowChatState : ChatState
+    highChatState : ChatState
+    lowReview: String
+    rating: String
+    referenceMessage: String
+}
+
+enum FriendState {
+    NONE
+    ACCEPTED
+    DECLINED
+}
+
+enum ChatState {
+    NONE
+    ACCEPTED
+    DECLINED
+    BLOCKED
+}
+
+type UserAttendsEventRelationship {
+    review: String
+    creator: Boolean
+    approvalStatus: ApprovalStatus!
+    paid: Boolean
+    pointsPending: Long!
+    detached: Boolean
+    cohost: Boolean
+}
+
+enum ApprovalStatus {
+    Pending
+    PendingPayment
+    Approved
+    Denied
+}
+
+enum LinkedAccount {
+    Facebook
+    Twitter
+    GooglePlus
+}
+
+enum Gender {
+    MALE
+    FEMALE
+    OTHER
+    PREFERNOTTOANSWER
+}

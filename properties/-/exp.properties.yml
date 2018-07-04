@@ -1,0 +1,9 @@
+# Override defaults:
+domain: evolvedhorror.com
+neo4j:
+  domain: &neo4j_domain evolvedhorror.com
+  domain_from_within_docker_container: *neo4j_domain
+web:
+  domain: &web_domain evolvedhorror.com
+
+# Define environment-specific properties:

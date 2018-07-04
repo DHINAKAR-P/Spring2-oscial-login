@@ -1,0 +1,33 @@
+extend type Query {
+    calculateDistance(a: LocationInput!, b: LocationInput!, distanceUnit: DistanceUnit!): Float!
+}
+
+type Location {
+    latitude: Float!
+    longitude: Float!
+    address:String
+    fuzzyLocation:String
+    locality:String
+    name:String
+    description:String
+    reviews:String
+
+}
+
+input LocationInput {
+    latitude: Float!
+    longitude: Float!
+    address:String
+    fuzzyLocation:String
+    locality:String
+    name:String
+    description:String
+    reviews:String
+}
+
+enum DistanceUnit {
+    METER
+    KILOMETER
+    MILE
+}
+

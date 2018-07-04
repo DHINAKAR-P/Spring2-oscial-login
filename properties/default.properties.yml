@@ -1,0 +1,23 @@
+ssl_enabled: true
+domain: &domain zimidy.com
+port: 8080
+super_admin:
+  default_first_name: Admin
+  default_last_name: Zimidy
+  default_email: admin@zimidy.com
+  default_password: down4anything
+neo4j:
+  protocol: https
+  domain: &neo4j_domain zimidy.com
+  domain_from_within_docker_container: *neo4j_domain
+  bolt_port: 7687
+  browser_port: 7473
+  password: WinterGr33n
+web:
+  protocol: https
+  domain: &web_domain zimidy.com
+  port: 88
+docker:
+  image_tag: '@{project}/@{module}:@{env}'
+  container_name: '@{project}.@{module}.@{env}'
+  network_name: intranet

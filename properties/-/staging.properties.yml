@@ -1,0 +1,9 @@
+# Override defaults:
+domain: &domain cunnectable.com
+neo4j:
+  domain: &neo4j_domain cunnectable.com
+  domain_from_within_docker_container: *neo4j_domain
+web:
+  domain: &web_domain cunnectable.com
+
+# Define environment-specific properties:

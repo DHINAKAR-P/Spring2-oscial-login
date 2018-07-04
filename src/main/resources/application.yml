@@ -1,0 +1,80 @@
+server:
+  port: @{port}
+  ssl:
+    enabled: @{ssl_enabled}
+    key-store-type: PKCS12
+    key-store: /etc/letsencrypt/live/@{domain}/bundle.pfx
+    key-store-password: down4anything
+    key-alias: 1
+
+spring:
+  data.neo4j:
+    uri: bolt://@{neo4j.domain_from_within_docker_container}:@{neo4j.bolt_port}
+    username: neo4j
+    password: @{neo4j.password}
+    auto-index: assert
+#  todo: mailing features are temporarily switched of, because authentication to mail account doesn't work
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: accountcreate@zimidy.com
+#    password: Down4Anything!
+#    properties.mail.smtp: # available properties: https://goo.gl/anLq4j
+#      starttls:
+#        enable: true
+#        required: true
+#      auth: true
+  freemarker:
+    enabled: false
+    cache: true
+    settings: # available settings: https://goo.gl/9sh2TL
+      # It allows to use file extensions to control output format and auto-escaping
+      # Supported extensions and corresponding values of output format and auto-escaping:
+      # 1. ftl  - undefined, false
+      # 2. ftlh - HTML, true
+      # 3. ftlx - XML, true
+      recognize_standard_file_extensions: true
+
+com.zimidy.api:
+  env: @{env}
+  metadata:
+    build:
+      timestamp: @{build-timestamp}
+    commit:
+      timestamp: @{commit.timestamp}
+      branch: @{commit.branch}
+      revision: @{commit.revision}
+  super_admin:
+    default_first_name: @{super_admin.default_first_name}
+    default_last_name: @{super_admin.default_last_name}
+    default_email: @{super_admin.default_email}
+    default_password: @{super_admin.default_password}
+  web:
+    protocol: @{web.protocol}
+    domain: @{web.domain}
+    port: @{web.port}
+
+#Plivo credentials --dhina
+sms_provider.plivo.auth_id : MAZGMWZME4MZEXOGZKZD
+sms_provider.plivo.auth_token: NGJiZDRiODY2ZTZmMTM3NWI4OGFjY2M0ZDU1ZTZh
+sms_provider.plivo.phone_number: +919566553039
+
+gcs.environment_classifier_char: S
+gcs.bucket: staging_images
+
+
+### APP:
+app.environment.production: false
+app.environment.development: true
+
+#message.properties
+
+
+#Google login ID
+spring.security.oauth2.client.registration.google.client-id: 919843852036-2ifoq797u4rltqkqb78h95cp86916ik1.apps.googleusercontent.com
+spring.security.oauth2.client.registration.google.client-secret: YGoICp7sUw1MTAbfS8nzZ1UF
+
+#faceBook Login Id
+spring.security.oauth2.client.registration.facebook.client-id: 437385093398547
+spring.security.oauth2.client.registration.facebook.client-secret: 9d44c7fba8fb2dfdb36b0e3abbc679d7
+spring.security.oauth2.client.registration.facebook.scope: user_posts

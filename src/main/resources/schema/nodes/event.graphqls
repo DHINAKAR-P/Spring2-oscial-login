@@ -1,0 +1,182 @@
+extend type Query {
+    event(id: ID!): Event
+    events(before: String, after: String, first: Int, last: Int): EventConnection
+    setCohost(eventId: Long, userId: Long, value: Boolean): Boolean?
+    findEventsByLocation(location: LocationInput!, radiusInUnits: Float!, unit: DistanceUnit!): [Event]!
+    findEventsByName(name: String): [Event]!
+    plivoInvite(plivouser: String,plivoSignInUrl: String?,eventId: Long,userId: ID): String?
+    getUpcomingEvents(userId: ID!): EventListDto
+    getUpcomingEventsExt(userId: ID!): EventListDto
+    getPastEventsExt(userId: ID!): EventListDto
+}
+
+extend type Mutation {
+    createEvent(input: CreateEventInput!): EventPayload
+    updateEvent(input: UpdateEventInput!): EventPayload
+    deleteEvent(input: DeleteEventInput!): EventPayload
+}
+
+type Event implements Node {
+    id: ID!
+    location: Location
+    startDate: Long,
+    endDate: Long,
+    name: String!
+    description: String
+    creator: User
+    eventType:String
+    eventSubType:String
+    tags:String
+    address:String
+    rating:String
+    website:String
+    placeId:String
+    placeType:String
+    countryCode:String
+    postalCode:String
+    privateEvent:Boolean
+    maxAttendees:Int
+    payingEvent:Boolean
+    bringAnything:Boolean
+    bringToEvent:String
+    anySpecialCriteria:Boolean
+    specialCriteria:String
+    pictureURL:String
+    sponsored:Boolean
+    openEvent:Boolean
+    fromChat:Boolean
+    pointsCost:Int
+    add2rewardEvent:Boolean
+    groups:[String]
+    friendIds:[Long]
+
+}
+
+type EventConnection {
+    edges: [EventEdge]
+    pageInfo: PageInfo!
+}
+
+type EventEdge {
+    cursor: String!
+    node: Event
+}
+
+input CreateEventInput {
+    clientMutationId: String
+    data: CreateEventData!
+}
+
+input CreateEventData {
+    location: LocationInput
+    startDate: Long,
+    endDate: Long,
+    name: String!
+    description: String
+    creatorUserId: ID!
+    eventType:String
+    eventSubType:String
+    tags:String
+    address:String
+    rating:String
+    website:String
+    placeId:String
+    placeType:String
+    countryCode:String
+    postalCode:String
+    privateEvent:Boolean
+    maxAttendees:Int
+    payingEvent:Boolean
+    bringAnything:Boolean
+    bringToEvent:String
+    anySpecialCriteria:Boolean
+    specialCriteria:String
+    pictureURL:String
+    sponsored:Boolean
+    openEvent:Boolean
+    fromChat:Boolean
+    pointsCost:Int
+    add2rewardEvent:Boolean
+    groups:[String]
+    friendIds:[Long]
+
+}
+
+input UpdateEventInput {
+    clientMutationId: String
+    data: UpdateEventData!
+}
+
+input UpdateEventData {
+    id: ID!
+    location: LocationInput
+    startDate: Long,
+    endDate: Long,
+    name: String!
+    description: String
+    eventType:String
+    eventSubType:String
+    tags:String
+    address:String
+    rating:String
+    website:String
+    placeId:String
+    placeType:String
+    countryCode:String
+    postalCode:String
+    privateEvent:Boolean
+    maxAttendees:Int
+    payingEvent:Boolean
+    bringAnything:Boolean
+    bringToEvent:String
+    anySpecialCriteria:Boolean
+    specialCriteria:String
+    pictureURL:String
+    sponsored:Boolean
+    openEvent:Boolean
+    fromChat:Boolean
+    pointsCost:Int
+    add2rewardEvent:Boolean
+    groups:[String]
+    friendIds:[Long]
+
+}
+
+input DeleteEventInput {
+    clientMutationId: String
+    data: DeleteEventData!
+}
+
+input DeleteEventData {
+    id: ID!
+}
+
+type EventPayload {
+    clientMutationId: String
+    node: Event
+}
+
+type EventListDto {
+    events: [EventDto]
+}
+
+type EventDto {
+     id: ID
+     name: String
+     startDate: Long
+     endDate: Long
+     privateEvent: Boolean
+     payingEvent: Boolean
+     bringAnything: Boolean
+     bringToEvent: String
+     anySpecialCriteria: Boolean
+     specialCriteria: String
+     description: String
+     pictureURL: String
+     sponsored: Boolean
+     fromChat: Boolean
+     creator: Boolean
+     detached: Boolean
+     openEvent: Boolean
+     approvalStatus: String
+}

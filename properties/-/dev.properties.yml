@@ -1,0 +1,12 @@
+# Override defaults:
+ssl_enabled: false
+domain: &domain localhost
+neo4j:
+  domain: &neo4j_domain cunnectable.com
+  domain_from_within_docker_container: *neo4j_domain
+web:
+  protocol: http
+  domain: &web_domain localhost
+
+# Define environment-specific properties:
+debug_port: 8000

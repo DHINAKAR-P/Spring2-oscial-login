@@ -1,0 +1,20 @@
+extend type Query {
+ userInterest(id: ID!): UserInterest
+ userInterests(before: String, after: String, first: Int, last: Int): UserInterestConnection
+}
+
+# A UserInterest for user
+type UserInterest implements Node {
+ id: ID!
+ name:String
+}
+
+type UserInterestConnection {
+ edges: [UserInterestEdge]
+ pageInfo: PageInfo!
+}
+
+type UserInterestEdge {
+ cursor: String!
+ node: UserInterest
+}
